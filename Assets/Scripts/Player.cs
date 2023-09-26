@@ -5,7 +5,7 @@ using Unity.Netcode;
 
 public class Player : NetworkBehaviour
 {
-    public float speed = 1;
+    public float speed = 10;
     Rigidbody rb;
     Renderer render;
     // Start is called before the first frame update
@@ -21,11 +21,17 @@ public class Player : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        rb.AddForce(new Vector3(Input.GetAxis("Horizontal") * speed, 0, Input.GetAxis("Vertical") * speed));
+        Movement();
     }
 
     public override void OnNetworkSpawn()
     {
         if (!IsOwner) { Destroy(this); }
+    }
+
+    private void Movement()
+    {
+        Vector3 input = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        rb.velocity = input * speed;
     }
 }
